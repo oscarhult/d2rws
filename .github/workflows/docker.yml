@@ -1,4 +1,3 @@
-# This workflow uses actions that are not certified by GitHub. They are provided by a third-party and are governed by separate terms of service, privacy policy, and support documentation.
 # https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#publishing-a-package-using-an-action
 
 name: Create and publish a Docker image
@@ -19,23 +18,26 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Log in to the Container registry
+      # https://github.com/marketplace/actions/docker-login
+      - name: Log in
         uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      # https://github.com/marketplace/actions/docker-metadata-action
+      - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker image
+      # https://github.com/marketplace/actions/build-and-push-docker-images
+      - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
